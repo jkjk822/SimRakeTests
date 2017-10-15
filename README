@@ -1,3 +1,7 @@
 Assignment 4 - simrake
 Taylan K. Sen
 
+In this assignment, you will implement a simple version of Rake called 
+SimRake, which is used in the same way as Rake but includes a subset of 
+Rake constructs. 
+
