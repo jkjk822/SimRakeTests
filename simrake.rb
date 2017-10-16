@@ -5,29 +5,64 @@
 #
 #------------------------------------------------------------------------------
 # 
+
 #-------------------------------------------------
 class SimRake
-  # store all tasks and dependencies
+  # Store all tasks and dependencies
 
+  #-----------------------------------------------
+  def initialize()
+    # allocates new Hash for holding all tasks
+    @target_dependencies_hash = Hash.new
+    @target_actions_hash = Hash.new
+  end
+  
+  #-----------------------------------------------
   def complete_root_task()
     puts "...complete_root_task"
     # TODO
+    puts "target_dependencies_hash:"
+    puts @target_dependencies_hash
+    
+    puts "target_actions_hash"
+    puts @target_actions_hash
+  end
+  
+  #-----------------------------------------------
+  def add_task(task_hash, &action)
+    # merges the task_hash with the tasks_hash, adds
+    # action to the action_hash
+
+    if task_hash.is_a?(Hash) 
+      @target_dependencies_hash.merge!(task_hash)
+      target_name = task_hash.first[0]  # ignore others if more than 1 element
+      @target_actions_hash[target_name] = action
+    elsif task_hash.is_a?(Symbol)
+      target_name = task_hash  # ignore others if more than 1 element
+      @target_actions_hash[target_name] = action
+      @target_dependencies_hash[target_name] = nil
+    else
+      puts "ERROR, abnormal task syntax:"
+      puts task_hash
+    end
   end
   
 end
 
-# $builder is a global variable that can be refer to in the task function.
-$builder = SimRake.new   
+# $SIM_RAKE is a global variable that can be refer to in the task function.
+$SIM_RAKE = SimRake.new   
 
 
 #------------------------------------------------------------------------------
 # parameters
-#   hash: string representing the 
-#        "target: [:dep1, :dep2, …]”
+#   hash: hash table reference representing the task dependency
+#        "target: [:dep1, :dep2]"
 #-------------------------------------------------
-def task( hash, &action )
+def task( task_hash, &callback_function )
   # register the task,its dependent tasks,and the action at the builder object
-  puts hash
+  puts task_hash
+  
+  $SIM_RAKE.add_task(task_hash, &callback_function)
   # TODO
   
 end
@@ -41,4 +76,4 @@ puts "ARGS:" + ARGV[0]
 load ARGV[0]  
 
 
-$builder.complete_root_task
+$SIM_RAKE.complete_root_task
