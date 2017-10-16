@@ -20,12 +20,36 @@ class SimRake
   #-----------------------------------------------
   def complete_root_task()
     puts "...complete_root_task"
-    # TODO
-    puts "target_dependencies_hash:"
-    puts @target_dependencies_hash
+
+    #puts "\ntarget_dependencies_hash:"
+    #puts @target_dependencies_hash
     
-    puts "target_actions_hash"
+    while @target_dependencies_hash.any? do
+      @target_dependencies_hash.each do |target_name, deps|
+        if deps.none?
+          puts target_name
+          @target_actions_hash[target_name].call
+          @target_actions_hash.delete(target_name)
+          @target_dependencies_hash.delete(target_name)
+          # remove target_name from all deps
+          @target_dependencies_hash.each do |target_name2, deps2|
+            if deps2 == target_name
+              deps2 = []
+            else
+              deps2.delete(target_name)
+            end
+          end
+        end
+      end
+    end
+    
+    #puts @target_dependencies_hash
+
+    #puts "\ntarget_actions_hash"
     puts @target_actions_hash
+    
+    
+    
   end
   
   #-----------------------------------------------
@@ -34,13 +58,18 @@ class SimRake
     # action to the action_hash
 
     if task_hash.is_a?(Hash) 
-      @target_dependencies_hash.merge!(task_hash)
       target_name = task_hash.first[0]  # ignore others if more than 1 element
+      deps = task_hash.first[1]
       @target_actions_hash[target_name] = action
+      if deps.is_a?(Symbol)
+        @target_dependencies_hash[target_name] = [deps]
+      else
+        @target_dependencies_hash[target_name] = deps
+      end
     elsif task_hash.is_a?(Symbol)
       target_name = task_hash  # ignore others if more than 1 element
       @target_actions_hash[target_name] = action
-      @target_dependencies_hash[target_name] = nil
+      @target_dependencies_hash[target_name] = []
     else
       puts "ERROR, abnormal task syntax:"
       puts task_hash
@@ -49,8 +78,6 @@ class SimRake
   
 end
 
-# $SIM_RAKE is a global variable that can be refer to in the task function.
-$SIM_RAKE = SimRake.new   
 
 
 #------------------------------------------------------------------------------
@@ -63,12 +90,13 @@ def task( task_hash, &callback_function )
   puts task_hash
   
   $SIM_RAKE.add_task(task_hash, &callback_function)
-  # TODO
-  
 end
 
 #==============================================================================
 # main
+
+# $SIM_RAKE is a global variable that can be refer to in the task function.
+$SIM_RAKE = SimRake.new   
 
 puts "starting simrake"
 puts "ARGS:" + ARGV[0]
