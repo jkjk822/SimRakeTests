@@ -1,0 +1,141 @@
+task :hello do
+  puts "Hello, World"
+end
+
+desc "Task empty block nothing happens."
+task :nothing
+################################################################
+            # Simple-Task-dependencies-warm-up #
+################################################################
+desc "Simple Task Dependencies"
+task :touch_three => [:touch_foo, :touch_bar] do
+    puts "touch the third file."
+end
+
+
+task :touch_foo do
+    puts "touch the foo file."
+end
+
+task :touch_bar do
+    puts "touch the bar file."
+end
+
+################################################################
+            # Multiple-Tasks-dependent-on-one #
+################################################################
+desc "Multiple-Tasks-dependent-on-one"
+task :T1 => [:T0] do
+    puts "task :T1 => [:T0]"
+end
+
+task :T2 => [:T0] do
+    puts "task :T2 => [:T0]"
+end
+
+
+task :T3 => [:T0] do
+    puts "task :T3 => [:T0]"
+end
+
+
+task :T4 => [:T0] do
+    puts "task :T4 => [:T0]"
+end
+
+task :T0 do
+    puts "task: T0, should be only visit once."
+end
+
+################################################################
+            # 3-Layer-Tasks-dependent-on-one #
+################################################################
+desc "3-Layer-Tasks-dependent-on-one"
+task :A1 => [:B1, :A2] do
+    puts "task: A1 => [:B1, A2], this A1 should follow by A2"
+end
+
+task :A2 => [:B1, :B2] do
+    puts "task: A2 => [:B1, :B2], this A2 should follow by B1"
+end
+
+
+task :B1 => [:C, :B2] do
+    puts "task: B1 => [:C, :B2], this B1 should follow by B2"
+end
+
+
+task :B2 => [:C] do
+    puts "task: B2 => [:C], this B should follow by C"
+end
+
+task :C do
+    puts "task: C, should be visit first."
+end
+
+
+################################################################
+            # Four-Layer-Task-dependencies #
+################################################################
+desc "4-Layers Task Dependencies"
+task :root => [:l1, :r1] do
+    puts "Layer: root layer L0."
+end
+
+
+task :l1 => [:ll2, :lr2] do
+    puts "Layer: left L1. => [:ll2, :lr2]"
+end
+
+task :r1 => [:rl2, :rr2] do
+    puts "Layer: right R1. => [:rl2, :rr2]"
+end
+
+task :ll2 => [:lll3, :llr3] do
+    puts "Layer: left left LL2. => [:lll3, :llr3]"
+end
+
+task :lr2 => [:lrl3, :lrr3] do
+    puts "Layer: left right LR2. => [:lrl3, :lrr3]"
+end
+
+task :rl2 => [:rll3, :rlr3] do
+    puts "Layer: right left RL2. => [:rll3, :rlr3]"
+end
+
+task :rr2 => [:rrl3, :rrr3] do
+    puts "Layer: right right RR2. => [:rrl3, :rrr3]"
+end
+
+
+task :lll3 do
+    puts "Layer: left left left LLL3."
+end
+
+task :llr3 do
+    puts "Layer: left left right LLR3."
+end
+
+task :lrl3 do
+    puts "Layer: left right left LRL3."
+end
+
+task :lrr3 do
+    puts "Layer: left right right LRR3."
+end
+
+task :rll3 do
+    puts "Layer: right left left RLL3."
+end
+
+task :rlr3 do
+    puts "Layer: right left right RLR3."
+end
+
+task :rrl3 do
+    puts "Layer: right right left RRL3."
+end
+
+task :rrr3 do
+    puts "Layer: right right right RRR3."
+end
