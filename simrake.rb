@@ -19,18 +19,15 @@ class SimRake
   
   #-----------------------------------------------
   def build_target(symb) 
-    puts "build_target"
-    puts symb
     # recursively builds targets starting from root
-    deps = @target_dependencies_hash[symb] 
 
-    if deps == [] 
-      @target_actions_hash[symb]
-    else
-      deps.each do |e|
-        build_target(e)
-      end
+    puts "...build_target(" + String(symb) + ")"
+
+    @target_dependencies_hash[symb].each do |e|
+      build_target(e)
     end
+    @target_actions_hash[symb].call
+
   end
 
   #-----------------------------------------------
@@ -39,12 +36,7 @@ class SimRake
     build_target(:def)
     
     #puts @target_dependencies_hash
-
-    #puts "\ntarget_actions_hash"
-    puts @target_actions_hash
-    
-    
-    
+    #puts "\ntarget_actions_hash" 
   end
   
   #-----------------------------------------------
@@ -74,7 +66,7 @@ class SimRake
     end
 
     if is_first
-      puts "default is" + String(target_name)
+      puts "default task is " + String(target_name)
       @target_dependencies_hash[:def] = [target_name]
       @target_actions_hash[:def] = lambda{puts "default task completed"}
     end
@@ -92,7 +84,7 @@ end
 #-------------------------------------------------
 def task( task_hash, &callback_function )
   # register the task,its dependent tasks,and the action at the builder object
-  puts task_hash
+  #puts task_hash
   
   $SIM_RAKE.add_task(task_hash, &callback_function)
 end
