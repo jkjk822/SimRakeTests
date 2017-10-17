@@ -13,8 +13,8 @@ class SimRake
   #-----------------------------------------------
   def initialize()
     # allocates new Hash for holding all tasks
-    @target_dependencies_hash = Hash.new
-    @target_actions_hash = Hash.new
+    @deps_hash = Hash.new
+    @actions_hash = Hash.new
   end
   
   #-----------------------------------------------
@@ -23,10 +23,10 @@ class SimRake
 
     puts "...build_target(" + String(symb) + ")"
 
-    @target_dependencies_hash[symb].each do |e|
+    @deps_hash[symb].each do |e|
       build_target(e)
     end
-    @target_actions_hash[symb].call
+    @actions_hash[symb].call
 
   end
 
@@ -35,8 +35,8 @@ class SimRake
     puts "...complete_root_task"
     build_target(:def)
     
-    #puts @target_dependencies_hash
-    #puts "\ntarget_actions_hash" 
+    #puts @deps_hash
+    #puts "\nactions_hash" 
   end
   
   #-----------------------------------------------
@@ -44,21 +44,21 @@ class SimRake
     # merges the task_hash with the tasks_hash, adds
     # action to the action_hash
 
-    is_first = @target_dependencies_hash.none?
+    is_first = @deps_hash.none?
 
     if task_hash.is_a?(Hash) 
       target_name = task_hash.first[0]  # ignore others if more than 1 element
       deps = task_hash.first[1]
-      @target_actions_hash[target_name] = action
+      @actions_hash[target_name] = action
       if deps.is_a?(Symbol)
-        @target_dependencies_hash[target_name] = [deps]
+        @deps_hash[target_name] = [deps]
       else
-        @target_dependencies_hash[target_name] = deps
+        @deps_hash[target_name] = deps
       end
     elsif task_hash.is_a?(Symbol)
       target_name = task_hash  # ignore others if more than 1 element
-      @target_actions_hash[target_name] = action
-      @target_dependencies_hash[target_name] = []
+      @actions_hash[target_name] = action
+      @deps_hash[target_name] = []
     else
       puts "ERROR, abnormal task syntax:"
       puts task_hash
@@ -67,14 +67,13 @@ class SimRake
 
     if is_first
       puts "default task is " + String(target_name)
-      @target_dependencies_hash[:def] = [target_name]
-      @target_actions_hash[:def] = lambda{puts "default task completed"}
+      @deps_hash[:def] = [target_name]
+      @actions_hash[:def] = lambda{puts "default task completed"}
     end
 
   end
   
 end
-
 
 
 #------------------------------------------------------------------------------
