@@ -1,0 +1,14 @@
+#!/usr/bin/env ruby
+
+#Expected output (minus #'s):
+
+#dep1
+#default
+
+task default: :dep1 do
+    puts "default"
+end
+
+task :dep1 do
+    puts "dep1"
+end
