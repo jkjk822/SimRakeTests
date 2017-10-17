@@ -1,0 +1,21 @@
+task t1: [:t2,:t3,:t4] do
+    puts "t1"
+end
+
+task t2: [:t3,:t4]
+
+task t3: [:t6] do
+    a = 10 + 7 * 10000 
+    puts "t3 #{a}"
+end
+
+task t4: :t5 do
+    puts "t4"
+end
+
+task :t5
+
+task :t6 do
+    puts "t6"
+end
+
