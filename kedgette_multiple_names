@@ -1,0 +1,29 @@
+# Expected Output:
+#
+# Here I am!
+# Here I am again!!!
+# I'm three!
+# I am two, but task one was repeated!
+# All finished!
+
+task two: :three do
+  puts "I am two, but task one was repeated!"
+end
+
+task :one do
+  x = 3
+  x = x + 1
+  puts "Here I am!"
+end
+
+task :one do
+  puts "Here I am again!!!"
+end
+
+task :three do
+  puts "I'm three!"
+end
+
+task default: [:one,:two] do
+  puts "All finished!"
+end

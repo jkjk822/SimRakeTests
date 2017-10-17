@@ -1,0 +1,7 @@
+# Expected Output:
+#
+# it's just me!
+
+task :hello do
+  puts "it's just me!"
+end
