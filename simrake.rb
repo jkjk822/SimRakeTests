@@ -18,30 +18,25 @@ class SimRake
   end
   
   #-----------------------------------------------
-  def complete_root_task()
-    puts "...complete_root_task"
+  def build_target(symb) 
+    puts "build_target"
+    puts symb
+    # recursively builds targets starting from root
+    deps = @target_dependencies_hash[symb] 
 
-    #puts "\ntarget_dependencies_hash:"
-    #puts @target_dependencies_hash
-    
-    while @target_dependencies_hash.any? do
-      @target_dependencies_hash.each do |target_name, deps|
-        if deps.none?
-          puts target_name
-          @target_actions_hash[target_name].call
-          @target_actions_hash.delete(target_name)
-          @target_dependencies_hash.delete(target_name)
-          # remove target_name from all deps
-          @target_dependencies_hash.each do |target_name2, deps2|
-            if deps2 == target_name
-              deps2 = []
-            else
-              deps2.delete(target_name)
-            end
-          end
-        end
+    if deps == [] 
+      @target_actions_hash[symb]
+    else
+      deps.each do |e|
+        build_target(e)
       end
     end
+  end
+
+  #-----------------------------------------------
+  def complete_root_task()
+    puts "...complete_root_task"
+    build_target(:def)
     
     #puts @target_dependencies_hash
 
@@ -56,6 +51,8 @@ class SimRake
   def add_task(task_hash, &action)
     # merges the task_hash with the tasks_hash, adds
     # action to the action_hash
+
+    is_first = @target_dependencies_hash.none?
 
     if task_hash.is_a?(Hash) 
       target_name = task_hash.first[0]  # ignore others if more than 1 element
@@ -73,7 +70,15 @@ class SimRake
     else
       puts "ERROR, abnormal task syntax:"
       puts task_hash
+      return
     end
+
+    if is_first
+      puts "default is" + String(target_name)
+      @target_dependencies_hash[:def] = [target_name]
+      @target_actions_hash[:def] = lambda{puts "default task completed"}
+    end
+
   end
   
 end
