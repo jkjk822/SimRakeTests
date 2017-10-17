@@ -1,0 +1,60 @@
+# Comment on the first one, you can try another one. # 
+
+
+################################################################
+            # Simple-Circle-Detect-warm-up #
+################################################################
+desc "Simple Circle Warmup"
+task :C0 => [:C1, :C2] do
+    puts "touch the C0 file."
+end
+
+
+task :C1 => [:C2] do
+    puts "touch the C1 file."
+end
+
+task :C2 => [:C1]do
+    puts "touch the C2 file."
+end
+
+# from my detection: the answer is [:D0, :D3, :D4, :D6, :D3] #
+# multiple answer is possible, depends on your search algorithm #
+# Simply BFS is used in my case... #
+################################################################
+                # Large-Circle-Detect-check #
+################################################################
+desc "Large Large-Circle-Detect"
+task :D0 => [:D1, :D3] do
+    puts "Large Large-Circle-Detect Fails"
+end
+
+task :D1 => [:D2, :D3] do
+    puts "Large Large-Circle-Detect Fails"
+end
+
+task :D2 => [:D3, :D4]do
+    puts "Large Large-Circle-Detect Fails"
+end
+
+task :D3 => [:D7, :D4]do
+    puts "Large Large-Circle-Detect Fails"
+end
+
+task :D4 => [:D6] do
+    puts "Large Large-Circle-Detect Fails"
+end
+
+task :D5 => [:D6]do
+    puts "Large Large-Circle-Detect Fails"
+end
+
+task :D6 => [:D2, :D3] do
+    puts "Large Large-Circle-Detect Fails"
+end
+
+task :D7 do
+    puts "Large Large-Circle-Detect Fails"
+end
+
+
