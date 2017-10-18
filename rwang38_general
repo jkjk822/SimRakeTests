@@ -1,0 +1,40 @@
+# Outputs:
+# CC  _0
+# CC  _1
+# CC  _2
+# CC  _3
+# CC  _4
+# CC  another _4
+# CC  _5
+# All done.
+
+task :_0 do
+  puts 'CC  _0'
+end
+
+task _1: :_0 do
+  puts 'CC  _1'
+end
+
+task _2: :_0 do
+  puts 'CC  _2'
+end
+
+task _3: :_2 do
+  puts 'CC  _3'
+end
+
+task _4: :_1 do
+  puts 'CC  _4'
+end
+
+task _4: [:_1, :_2] do
+  puts 'CC  another _4'
+end
+
+task _5: [:_1, :_3, :_4] do
+  puts 'CC  _5'
+  puts 'All done.'
+end
+
+task default: :_5
