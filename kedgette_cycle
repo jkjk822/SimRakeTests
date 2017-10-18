@@ -1,0 +1,20 @@
+# Expected Output:
+#
+# Should abort gracefully
+
+
+task three: :two do
+  puts "three relies on two!"
+end
+
+task two: :three do
+  puts "two relies on three!"
+end
+
+task :one do
+  puts "one => done"
+end
+
+task default: [:one,:two] do
+  puts "default => done"
+end
