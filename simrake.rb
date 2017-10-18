@@ -7,14 +7,24 @@
 # 
 
 #-------------------------------------------------
+class Task
+	attr_accessor :name, :deps, :action, :action_ran
+	def initialize()
+		@name = ""
+		@deps = []
+		@action = []
+		@action_ran = false
+	end
+end
+
+#-------------------------------------------------
 class SimRake
   # Store all tasks and dependencies
 
   #-----------------------------------------------
   def initialize()
     # allocates new Hash for holding all tasks
-    @deps_hash = Hash.new
-    @actions_hash = Hash.new
+    @tasks = Hash.new
   end
   
   #-----------------------------------------------
@@ -23,20 +33,21 @@ class SimRake
 
     puts "...build_target(" + String(symb) + ")"
 
-    @deps_hash[symb].each do |e|
+    @tasks[symb].deps.each do |e|
       build_target(e)
     end
-    @actions_hash[symb].call
+    @tasks[symb].action.call
 
   end
 
   #-----------------------------------------------
   def complete_root_task()
-    puts "...complete_root_task"
-    build_target(:def)
-    
-    #puts @deps_hash
-    #puts "\nactions_hash" 
+  	# check if there is a task :default and if so, replace
+  	# !root task with this task
+  	if @tasks[:default]
+  		@tasks["!root"].deps = [@tasks[:default].name]
+  	end
+    build_target("!root")
   end
   
   #-----------------------------------------------
@@ -44,31 +55,34 @@ class SimRake
     # merges the task_hash with the tasks_hash, adds
     # action to the action_hash
 
-    is_first = @deps_hash.none?
+    is_first = @tasks.none?
 
+    new_task = Task.new
+    new_task.action = action
     if task_hash.is_a?(Hash) 
-      target_name = task_hash.first[0]  # ignore others if more than 1 element
+      new_task.name = task_hash.first[0]  # ignore others if more than 1 element
       deps = task_hash.first[1]
-      @actions_hash[target_name] = action
       if deps.is_a?(Symbol)
-        @deps_hash[target_name] = [deps]
+        new_task.deps = [deps]
       else
-        @deps_hash[target_name] = deps
+        new_task.deps = deps
       end
     elsif task_hash.is_a?(Symbol)
-      target_name = task_hash  # ignore others if more than 1 element
-      @actions_hash[target_name] = action
-      @deps_hash[target_name] = []
+      new_task.name = task_hash  # ignore others if more than 1 element
+      new_task.deps = []
     else
       puts "ERROR, abnormal task syntax:"
       puts task_hash
       return
     end
-
+	@tasks[new_task.name] = new_task    
+    
     if is_first
-      puts "default task is " + String(target_name)
-      @deps_hash[:def] = [target_name]
-      @actions_hash[:def] = lambda{puts "default task completed"}
+      root_task = Task.new
+      root_task.name = "!root"
+      root_task.deps = [new_task.name]
+      root_task.action = lambda{puts "default task completed"}
+      @tasks[root_task.name] = root_task
     end
 
   end
