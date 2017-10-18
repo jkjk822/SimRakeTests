@@ -1,0 +1,54 @@
+#output:
+
+# codeGen
+# compile
+# dataLoad
+# test1
+# test2
+# test3
+# default
+
+
+
+task :test do
+	puts "test1"
+end
+
+task test: [:compile, :dataLoad] do
+  puts "test2"
+end
+
+task :test do
+	puts "test3"
+end
+
+task default: :test do
+	puts "default"
+end
+
+task :codeGen do
+  puts "codeGen"
+end
+
+task compile: :codeGen do
+  puts "compile"
+end
+
+task dataLoad: :codeGen do
+  puts "dataLoad"
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
