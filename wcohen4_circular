@@ -1,0 +1,15 @@
+#!/usr/bin/env ruby
+
+# circular dependency with three tasks
+
+task a: :b do
+    puts "a rely on b"
+end
+
+task b: :c do
+    puts "b rely on c"
+end
+
+task c: :a do
+    puts "c rely on a"
+end

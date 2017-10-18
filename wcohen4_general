@@ -1,0 +1,40 @@
+# Expected Output:
+# 20
+# one dependency
+# should only print once
+# department of redundancy department
+# multiple dependencies
+# Finished root and done
+
+task first: :math do
+    puts "one dependency"
+end
+
+task :math do
+    x = 5 * 4
+    puts x
+end
+
+task second: [:empty, :repeated_name, :repeated_dependency] do
+    puts "multiple dependencies"
+end
+
+task empty: :repeated_dependency do
+
+end
+
+task :repeated_name do
+    print "department of redundancy "
+end
+
+task :repeated_name do
+    puts "department"
+end
+
+task :repeated_dependency do
+    puts "should only print once"
+end
+
+task default: [:first, :second] do
+    puts "Finished root and done"
+end
