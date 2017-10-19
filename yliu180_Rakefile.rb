@@ -1,4 +1,32 @@
 #dependent tasks: Week, Day, Constellation, w2, w3, w4
+#expected output of Week:
+#I have three classes on Monday
+#I have one class on Tuesday
+#I have three classes on Wednesday
+#I have one class on Thursday
+#I have a lot of assignmemts on Friday
+#I have no assignment on weekends
+#Start a new week!
+#
+#expected output of Day:
+#I have eaten breakfast
+#I have eaten lunch
+#I have eaten dinner
+#I learn Dynamic Language at night
+#Have a good day!
+#
+#expected output of Constellation:
+#w1 = [ 1, 0]
+#w1 = [ 1, 0]
+#w2 = [ 0, 1]
+#w1 = [ 1, 0]
+#w2 = [ 0, 1]
+#w3 = [-1, 0]
+#w1 = [ 1, 0]
+#w2 = [ 0, 1]
+#w3 = [-1, 0]
+#w4 = [ 0,-1]
+#This is a QPSK constellation
 
 
 task :Week => [:Monday, :Tuesday, :Wednesday, :Thursday, :Friday, :default] do
@@ -104,3 +132,4 @@ task :w4 => [:w3] do
 	puts "w4 = [ 0,-1]"
 
 end
+
