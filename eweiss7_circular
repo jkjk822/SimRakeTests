@@ -1,0 +1,10 @@
+# Expected Output:
+
+# Should fail due to circular dependency
+
+
+task a: :b
+
+task b: :c
+
+task c: :a

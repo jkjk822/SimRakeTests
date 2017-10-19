@@ -1,0 +1,30 @@
+# Expected Output:
+
+# First!
+# Second!
+# Third!
+# Fourth!
+# Fifth!
+
+# NOTE: if "First!" prints multiple times, a dependency was (incorrectly) run twice
+
+
+task a: :b do
+    puts "Fifth!"
+end
+
+task b: [:c,:e] do
+    puts "Fourth!"
+end
+
+task c: :d do
+    puts "Third!"
+end
+
+task d: :e do
+    puts "Second!"
+end
+
+task :e do
+    puts "First!"
+end
