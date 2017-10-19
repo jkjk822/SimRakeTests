@@ -90,13 +90,24 @@ class SimRake
       puts task_hash
       return
     end
-	@tasks[new_task.name] = new_task    
     
+    # if task exists aleady append
+    if @tasks[new_task.name]
+      # merge deps and actions
+      @tasks[new_task.name].deps += new_task.deps
+      @tasks[new_task.name].action = lambda do
+        @tasks[new_task.name].action.call
+        new_task.action.call
+      end
+    else
+      @tasks[new_task.name] = new_task    
+    end  
+    # initially make first task default
     if is_first
       root_task = Task.new
       root_task.name = "!root"
       root_task.deps = [new_task.name]
-      root_task.action = lambda{puts "default task completed"}
+      root_task.action = lambda{puts "root task completed"}
       @tasks[root_task.name] = root_task
     end
 
