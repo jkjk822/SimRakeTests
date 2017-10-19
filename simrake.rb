@@ -8,13 +8,14 @@
 
 #-------------------------------------------------
 class Task
-	attr_accessor :name, :deps, :action, :action_ran
-	def initialize()
-		@name = ""
-		@deps = []
-		@action = []
-		@action_ran = false
-	end
+  attr_accessor :name, :deps, :action, :action_ran
+  def initialize()
+    @name = ""
+    @deps = []
+    @action = []
+    @action_ran = false
+    @call_stack = {}	
+  end
 end
 
 #-------------------------------------------------
@@ -30,23 +31,33 @@ class SimRake
   #-----------------------------------------------
   def build_target(symb) 
     # recursively builds targets starting from root
-
+    # basically is a depth first search
     puts "...build_target(" + String(symb) + ")"
 
+    if @call_stack[symb]
+      Kernel.abort("circular dependency found with:" + String(symb))
+    else
+      @call_stack[symb] = true
+    end
     @tasks[symb].deps.each do |e|
       build_target(e)
     end
-    @tasks[symb].action.call
-
+    if @tasks[symb].action_ran != true
+      @tasks[symb].action.call
+      @tasks[symb].action_ran = true
+    end
+    @call_stack.delete(symb)
   end
 
   #-----------------------------------------------
   def complete_root_task()
-  	# check if there is a task :default and if so, replace
-  	# !root task with this task
-  	if @tasks[:default]
-  		@tasks["!root"].deps = [@tasks[:default].name]
-  	end
+    # check if there is a task :default and if so, replace
+    # !root task with this task
+    if @tasks[:default]
+      @tasks["!root"].deps = [@tasks[:default].name]
+    end
+    
+    @call_stack = Hash.new  # start new call_stack for checking circular deps
     build_target("!root")
   end
   
