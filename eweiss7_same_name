@@ -1,0 +1,23 @@
+# Expected Output:
+
+# First!
+# Second!
+# Third!
+# Fourth!
+
+
+task a: :b do
+    puts "Third!"
+end
+
+task :b do
+    puts "First!"
+end
+
+task a: :c do
+    puts "Fourth!"
+end
+
+task :c do
+    puts "Second!"
+end
