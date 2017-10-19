@@ -132,4 +132,3 @@ task :w4 => [:w3] do
 	puts "w4 = [ 0,-1]"
 
 end
-
