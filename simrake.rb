@@ -8,6 +8,7 @@
 
 #-------------------------------------------------
 class Task
+  # basically just a structure for holding task related info
   attr_accessor :name, :deps, :action, :action_ran
   def initialize()
     @name = ""
@@ -20,6 +21,7 @@ end
 
 #-------------------------------------------------
 class SimRake
+  # Class for implementing functionality for emulating rake.
   # Store all tasks and dependencies
 
   #-----------------------------------------------
@@ -29,24 +31,26 @@ class SimRake
   end
   
   #-----------------------------------------------
-  def build_target(symb) 
+  def _build_target(symb) 
     # recursively builds targets starting from root
     # basically is a depth first search
+    
     puts "...build_target(" + String(symb) + ")"
 
+    # check for circularity by seeing if symb is in the call stack
     if @call_stack[symb]
       Kernel.abort("circular dependency found with:" + String(symb))
     else
       @call_stack[symb] = true
     end
     @tasks[symb].deps.each do |e|
-      build_target(e)
+      _build_target(e)
     end
     if @tasks[symb].action_ran != true
       @tasks[symb].action.call
       @tasks[symb].action_ran = true
     end
-    @call_stack.delete(symb)
+    @call_stack.delete(symb) # remove from call_stack as we go back up
   end
 
   #-----------------------------------------------
@@ -58,7 +62,7 @@ class SimRake
     end
     
     @call_stack = Hash.new  # start new call_stack for checking circular deps
-    build_target("!root")
+    _build_target("!root")
   end
   
   #-----------------------------------------------
