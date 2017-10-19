@@ -1,0 +1,12 @@
+# A->B->F->J
+# B->A
+
+task A: [:B] do
+     puts "task A action"
+end
+
+task B: [:A] do
+     puts "task B action"
+end
+
+

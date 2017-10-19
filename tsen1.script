@@ -1,0 +1,25 @@
+# A->B->C->D->E->F
+#
+task A: :B do
+     puts "task A action"
+end
+
+task B: :C do
+     puts "task B action"
+end
+
+task C: :D do
+     puts "task C action"
+end
+
+task D: [:E] do
+     puts "task D action"
+end
+
+task E: :F do
+     puts "task E action"
+end
+
+task :F do
+     puts "task F action"
+end

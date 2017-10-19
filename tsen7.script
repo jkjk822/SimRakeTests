@@ -1,0 +1,20 @@
+# A->B
+# A->C
+
+task A: [:B] do
+     puts "task A1 action"
+end
+
+task A: [:C] do
+     puts "task A2 action"
+end
+
+task :B do
+     puts "task B action"
+end
+
+task :C do
+     puts "task C action"
+end
+
+
