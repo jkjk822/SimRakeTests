@@ -9,12 +9,12 @@
 #-------------------------------------------------
 class Task
   # basically just a structure for holding task related info
-  attr_accessor :name, :deps, :action, :action_ran
+  attr_accessor :name, :deps, :actions, :actions_ran
   def initialize()
     @name = ""
     @deps = []
-    @action = []
-    @action_ran = false
+    @actions = []
+    @actions_ran = false
     @call_stack = {}	
   end
 end
@@ -39,16 +39,18 @@ class SimRake
 
     # check for circularity by seeing if symb is in the call stack
     if @call_stack[symb]
-      Kernel.abort("circular dependency found with:" + String(symb))
+      Kernel.abort("ABORT: circular dependency found with:" + String(symb))
     else
       @call_stack[symb] = true
     end
     @tasks[symb].deps.each do |e|
       _build_target(e)
     end
-    if @tasks[symb].action_ran != true
-      @tasks[symb].action.call
-      @tasks[symb].action_ran = true
+    if @tasks[symb].actions_ran != true
+      @tasks[symb].actions.each do |e|
+        e.call
+      end
+      @tasks[symb].actions_ran = true
     end
     @call_stack.delete(symb) # remove from call_stack as we go back up
   end
@@ -73,7 +75,7 @@ class SimRake
     is_first = @tasks.none?
 
     new_task = Task.new
-    new_task.action = action
+    new_task.actions = [action]
     if task_hash.is_a?(Hash) 
       new_task.name = task_hash.first[0]  # ignore others if more than 1 element
       deps = task_hash.first[1]
@@ -95,10 +97,7 @@ class SimRake
     if @tasks[new_task.name]
       # merge deps and actions
       @tasks[new_task.name].deps += new_task.deps
-      @tasks[new_task.name].action = lambda do
-        @tasks[new_task.name].action.call
-        new_task.action.call
-      end
+      @tasks[new_task.name].actions += new_task.actions
     else
       @tasks[new_task.name] = new_task    
     end  
@@ -107,7 +106,7 @@ class SimRake
       root_task = Task.new
       root_task.name = "!root"
       root_task.deps = [new_task.name]
-      root_task.action = lambda{puts "root task completed"}
+      root_task.actions = [lambda{puts "root task completed"}]
       @tasks[root_task.name] = root_task
     end
 
