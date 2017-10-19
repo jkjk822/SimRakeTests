@@ -1,0 +1,76 @@
+require 'fileutils'
+
+file 'activeFileTest' => 'passiveFileTest' do
+    puts 'activeFileTest'
+    FileUtils.touch('activeFileTest')
+end
+
+task default: [:simple, :chain, :binTree, :diamond, 'activeFileTest'] do
+    puts 'test'
+end
+
+task :simple do
+    puts 'simple'
+end
+
+task :simple do
+    puts 'simple2'
+end
+
+task chain: :link do
+    puts 'chain'
+end
+
+task :link do
+    puts 'link'
+end
+
+task link: :link2
+
+task :link2 do
+    puts 'link2'
+end
+
+task binTree: [:leftChild, :rightChild] do
+    puts 'binTree'
+end
+
+task leftChild: [:leftLeftChild, :leftRightChild] do
+    puts 'leftChild'
+end
+
+task :leftLeftChild do
+    puts 'leftLeftChild'
+end
+
+task :leftRightChild do
+    puts 'leftRightChild'
+end
+
+task rightChild: [:rightLeftChild, :rightRightChild] do
+    puts 'rightChild'
+end
+
+task :rightLeftChild do
+    puts 'rightLeftChild'
+end
+
+task :rightRightChild do
+    puts 'rightRightChild'
+end
+
+task diamond: [:dLeft, :dRight] do
+    puts 'diamond'
+end
+
+task dLeft: :dEnd do
+    puts 'dLeft'
+end
+
+task dRight: :dEnd do
+    puts 'dRight'
+end
+
+task :dEnd do
+    puts 'dEnd'
+end
