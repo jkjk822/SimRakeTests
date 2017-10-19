@@ -1,0 +1,47 @@
+
+# A->E->G->I->J
+# B->E
+# C->F->H->I
+# D->F
+#
+
+task A: :E do
+     puts "task A action"
+end
+
+task B: :E do
+     puts "task B action"
+end
+
+task C: :F do
+     puts "task C action"
+end
+
+task D: [:F] do
+     puts "task D action"
+end
+
+task E: :G do
+     puts "task E action"
+end
+
+task F: :H do
+     puts "task F action"
+end
+
+task G: :I do
+     puts "task G action"
+end
+
+task H: :I do
+     puts "task H action"
+end
+
+task I: :J do
+     puts "task I action"
+end
+
+task :J  do
+     puts "task J action"
+end
+

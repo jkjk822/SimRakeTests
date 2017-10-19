@@ -1,0 +1,21 @@
+Assignment 4 - simrake
+Taylan K. Sen
+
+
+----------------------------------------------------------------------------
+In this assignment, you will implement a simple version of Rake called 
+SimRake, which is used in the same way as Rake but includes a subset of 
+Rake constructs.
+
+simrake should be as close to rake as possible
+ it should:
+    -detect and abort on circular dependencies
+    -only run each task once, even if it's a dependency for more than one other
+    task be able to run multiple tasks with the same name but different bodies
+    (should run all tasks when the name is used, in the order they were 
+    defined) 
+    -handle other cases the same way rake does
+
+
+For extra credit you can also implement the file/time dependence of file tasks 
+that is present in standard rake.
