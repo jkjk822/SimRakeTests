@@ -1,0 +1,5 @@
+# Should fail: we have a missing dependency
+
+task default: :missing do
+	raise "Should not be seen"
+end

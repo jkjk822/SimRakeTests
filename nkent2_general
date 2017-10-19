@@ -1,0 +1,31 @@
+# Should output:
+# Only once
+# Twice defined (1)
+# Twice defined (2)
+# Foobar
+# Buzbaz
+# Done
+
+task :onlyonce do
+	puts "Only once"
+end
+
+task twicedefined: :onlyonce do
+	puts "Twice defined (1)"
+end
+
+task foobar: :onlyonce do
+	puts "Foobar"
+end
+
+task buzbaz: :twicedefined do
+	puts "Buzbaz"
+end
+
+task default: [:foobar, :buzbaz] do
+	puts "Done"
+end
+
+task :twicedefined do
+	puts "Twice defined (2)"
+end

@@ -1,0 +1,5 @@
+# This should fail since this is another form of circular dependency
+
+task circ1: :circ1 do
+	raise "Should not be seen"
+end

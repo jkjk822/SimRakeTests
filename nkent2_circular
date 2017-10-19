@@ -1,0 +1,9 @@
+# This should fail as there is a cirular dependency
+
+task circ1: :circ2 do
+	raise "Should not be seen (1)"
+end
+
+task circ2: :circ1 do
+	raise "Should not be seen (2)"
+end

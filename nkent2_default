@@ -1,0 +1,11 @@
+# Expected output:
+# First
+# Second
+
+task :first do
+	puts "First"
+end
+
+task default: :first do
+	puts "Second"
+end
