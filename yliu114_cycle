@@ -1,0 +1,14 @@
+# the order of the output should be
+# Cycle founded, none of the tasks will be executed
+
+task :circle1 => [:circle2] do
+	puts "this should not be printed, since it’s a circular dependency"
+end
+
+task :circle2 => [:circle3] do
+	puts "this should not be printed, since it’s a circular dependency"
+end
+
+task :circle3 => [:circle1] do
+	puts "this should not be printed, since it’s a circular dependency"
+end

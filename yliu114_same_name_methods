@@ -1,0 +1,21 @@
+# the order of the output should be
+# first task2
+# second task2
+# third task2
+# above should have three different task2s
+
+task :task1 => [:task2] do
+	puts "above should have three different task2s"
+end
+
+task :task2 do
+	puts "first task2"
+end
+
+task :task2 do
+	puts "second task2"
+end
+
+task :task2 do
+	puts "third task2"
+end

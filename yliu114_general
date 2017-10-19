@@ -1,0 +1,16 @@
+# the order of the output should be
+# touch the independent task1
+# touch the independent task2
+# touch the dependent task, which should happen last
+
+task :dependent_task => [:independent_task1,:independent_task2] do
+	puts "touch the dependent task, which should happen last"
+end
+
+task :independent_task1 do
+	puts "touch the independent task1"
+end
+
+task :independent_task2 do
+	puts "touch the independent task2"
+end

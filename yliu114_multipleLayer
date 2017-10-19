@@ -1,0 +1,21 @@
+# the order of the output should be
+# :t4 task, should be visited first
+# :t3 task, should follow t4
+# :t2 task, should follow t3
+# :t1 task, should follow t2
+
+task :t1 => [:t2,:t3] do
+	puts ":t1 task, should follow t2"
+end
+
+task :t2 => [:t3,:t4] do
+	puts ":t2 task, should follow t3"
+end
+
+task :t3 => [:t4] do
+	puts ":t3 task, should follow t4"
+end
+
+task :t4 do
+	puts ":t4 task, should be visited first"
+end
