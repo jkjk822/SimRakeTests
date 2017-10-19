@@ -1,0 +1,19 @@
+#!/usr/bin/env ruby
+
+#--Output-- 
+# Print-1, no default
+# Print-2, stops printing
+
+
+task task2: :task4 do
+	puts "Print-2, stops printing"
+end
+task :task4 do
+	puts "Print-1, no default"
+end
+task task3: :task4 do
+	puts "Print-3"
+end
+task task1: [:task2,:task3] do
+	puts "Print-4"
+end
