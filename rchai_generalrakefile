@@ -1,0 +1,32 @@
+task :purchaseVegetables => [:cook, :laundry] do
+  puts "a"
+end
+
+task :cook => [:test4]  do
+  puts "b"
+end
+
+task :laundry => [:test4, :test5] do
+  puts "c"
+end
+
+task :test4  do
+  puts "d"
+end
+
+task :test4  do
+  puts "e"
+end
+
+task :test5 do
+  puts "f"
+end
+
+#task :default => [:purchaseVegetables]
+#output:
+#d
+#e
+#b
+#f
+#c
+#a
